@@ -1,0 +1,41 @@
+{
+  "name": "mobx-slots",
+  "version": "1.0.0",
+  "description": "Some MobX-based extension gadgets.",
+  "type": "module",
+  "files": [
+    "README.md",
+    "dist",
+    "package.json"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wh5938316/mobx-slots.git"
+  },
+  "keywords": [
+    "javascript",
+    "mobx",
+    "slots",
+    "typescript"
+  ],
+  "author": "Herr Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wh5938316/mobx-slots/issues"
+  },
+  "homepage": "https://github.com/wh5938316/mobx-slots#readme",
+  "dependencies": {
+    "mobx": "^6.7.0"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.3.22",
+    "tsup": "^6.5.0",
+    "typescript": "^4.9.4"
+  }
+}
