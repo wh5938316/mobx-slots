@@ -5,6 +5,7 @@
     "target": "es5",
     "module": "ES2015",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "baseUrl": ".",
     "composite": false,
     "declaration": true,
     "declarationMap": true,
@@ -19,6 +20,6 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "include": ["."],
+  "include": [".", "./jest.config.ts"],
   "exclude": ["dist", "build", "node_modules"]
 }

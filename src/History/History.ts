@@ -8,16 +8,9 @@ export class History<RecordData = any> {
 
   _history: RecordItem<RecordData>[];
 
-  constructor(initHistory: RecordItem<RecordData> | string) {
-    if (typeof initHistory === "string") {
-      this._history = [
-        {
-          id: initHistory,
-          data: {
-            objects: [],
-          } as RecordData,
-        },
-      ];
+  constructor(initHistory?: RecordItem<RecordData>) {
+    if (typeof initHistory === "undefined") {
+      this._history = [];
     } else {
       this._history = [initHistory];
     }
@@ -36,13 +29,20 @@ export class History<RecordData = any> {
     });
   }
 
+  /**
+   * Record的长度
+   */
+  get size() {
+    return this._history.length;
+  }
+
   get pointer() {
     return this._pointer;
   }
 
-  set pointer(pointer: number) {
+  private set pointer(pointer: number) {
     // 指针设置不能小于0，或者大于历史记录长度
-    if (pointer < 0 && pointer > this._history.length) {
+    if (this.size === 0 || pointer < 0 || pointer > this.size) {
       return;
     }
 
@@ -53,21 +53,14 @@ export class History<RecordData = any> {
    * 指针是否指向最开始Record
    */
   get isBeginning(): boolean {
-    return this.pointer === 0;
+    return this.size === 0 || this.pointer === 0;
   }
 
   /**
    * 指针是否指向最末尾Record
    */
   get isEnding() {
-    return this.pointer === this._history.length - 1;
-  }
-
-  /**
-   * Record的长度
-   */
-  get size() {
-    return this._history.length;
+    return this.size === 0 || this.pointer === this.size - 1;
   }
 
   /**
@@ -86,47 +79,51 @@ export class History<RecordData = any> {
     if (pointer === "PREV") {
       if (this.isBeginning) {
         return null;
+      } else {
+        this.pointer = this.pointer - 1;
+        return this.currentRecord;
       }
-      this.pointer = this.pointer - 1;
-      return this.currentRecord;
-    }
-
-    if (pointer === "NEXT") {
+    } else if (pointer === "NEXT") {
       if (this.isEnding) {
         return null;
+      } else {
+        this.pointer = this.pointer + 1;
+        return this.currentRecord;
       }
-      this.pointer = this.pointer + 1;
-      return this.currentRecord;
-    }
-
-    if (typeof pointer === "number") {
+    } else {
       this.pointer = pointer;
-      return this.currentRecord;
-    }
 
-    return null;
+      if (this.size === 0 || pointer < 0 || pointer >= this.size - 1) {
+        return null;
+      } else {
+        return this.currentRecord;
+      }
+    }
   }
 
   /**
    * 新增记录
    *
-   * @param renderId 当前Core的renderID
+   * @param id 当前id
    * @param data 需要记录的 Record Data
    */
-  add(renderId: string, data: RecordData) {
+  add(id: string, data: RecordData) {
     // 如果history指针指向history最后一个record，则在其后添加一个新的record，并将指针指向新增的record
     if (this.isEnding) {
+      if (this.size > 0) {
+        this.pointer = this.pointer + 1;
+      }
+
       this._history.push({
-        id: renderId,
+        id,
         data: { ...data },
       });
-      this.pointer = this.pointer + 1;
     }
 
     // 否则删除当前指针之后的record，并在其后添加一个新的record，并将指针指向新增的record
     else {
       this._history.splice(this.pointer + 1, this.size - this.pointer, {
-        id: renderId,
+        id,
         data,
       });
       this.pointer = this.pointer + 1;
@@ -138,5 +135,6 @@ export class History<RecordData = any> {
    */
   clear() {
     this._history = [];
+    this.pointer = 0;
   }
 }
