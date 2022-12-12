@@ -1,6 +1,6 @@
 {
   "name": "mobx-slots",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Some MobX-based extension gadgets.",
   "type": "module",
   "files": [
@@ -12,7 +12,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts"
+    "build": "tsup src/index.ts --format esm --dts"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,9 @@
     "url": "https://github.com/wh5938316/mobx-slots/issues"
   },
   "homepage": "https://github.com/wh5938316/mobx-slots#readme",
+  "peerDependencies": {
+    "mobx": "^6.7.0"
+  },
   "dependencies": {
     "mobx": "^6.7.0"
   },

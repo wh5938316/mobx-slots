@@ -2,26 +2,13 @@ import { action, computed, makeObservable, observable } from "mobx";
 
 type RecordItem<D> = { id: string; data: D };
 
-class History<RecordData = any> {
+export class History<RecordData = any> {
   // 当前history指针
   _pointer: number = 0;
 
   _history: RecordItem<RecordData>[];
 
   constructor(initHistory: RecordItem<RecordData> | string) {
-    makeObservable(this, {
-      _history: observable.deep,
-      _pointer: observable,
-      pointer: computed,
-      size: computed,
-      isBeginning: computed,
-      isEnding: computed,
-      add: action,
-      clear: action,
-      currentRecord: computed,
-      roam: action,
-    });
-
     if (typeof initHistory === "string") {
       this._history = [
         {
@@ -34,6 +21,19 @@ class History<RecordData = any> {
     } else {
       this._history = [initHistory];
     }
+
+    makeObservable(this, {
+      _history: observable.deep,
+      _pointer: observable,
+      pointer: computed,
+      size: computed,
+      isBeginning: computed,
+      isEnding: computed,
+      add: action,
+      clear: action,
+      currentRecord: computed,
+      roam: action,
+    });
   }
 
   get pointer() {
@@ -140,5 +140,3 @@ class History<RecordData = any> {
     this._history = [];
   }
 }
-
-export default History;
